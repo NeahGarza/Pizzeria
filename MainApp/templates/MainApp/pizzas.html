@@ -1,0 +1,17 @@
+{% extends "MainApp/base.html" %}
+
+{% block content %}
+
+<p>Pizzas</p>
+
+<ul>
+    {% for type in pizzas %}
+    <li>
+        <a href="{% url 'MainApp:pizza' type.id %}"> {{type}} </a>
+    </li>
+    {% empty %}
+    <li> Oops! We don't have any pizzas yet... </li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

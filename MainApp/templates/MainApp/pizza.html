@@ -1,0 +1,22 @@
+{% extends "MainApp/base.html" %}
+
+{% block content %}
+
+<p> Pizza Type: {{pizza}} </p>
+
+<ul>
+    {% for topping in toppings %}
+    <li>
+        <p>{{topping | linebreaks }}</p>
+    </li>
+    {% empty %}
+    <li> Oops! This pizza has no toppings</li>
+    {% endfor %}
+</ul>
+
+{% if img_type == 0 %}
+<img src="{% static 'images/Cheese.jfif' %}" alt="Cheese Pizza">
+{% endif %}
+
+
+{% endblock content %}
