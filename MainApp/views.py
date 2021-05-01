@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from .models import Pizza, Topping
-#from .forms import PizzaForm, ToppingForm
+from .models import Pizza, Topping, Comment
+from .forms import PizzaForm, ToppingForm, CommentForm
 
 # Create your views here.
 
@@ -22,33 +22,29 @@ def pizzas(request):
 
 def pizza(request, pizza_id):
     pizza = Pizza.objects.get(id=pizza_id)
+    comments = pizza.comment_set.order_by('-date_added')
     toppings = pizza.topping_set.order_by('name')
-    print(pizza_id)
-    pizza.pizza_type = lookup(pizza_id)
+    pizza_type = lookup(pizza_id)
 
-    context = {'pizza': pizza, 'toppings':toppings}
+    context = {'pizza': pizza, 'toppings':toppings, 'comments':comments}
 
     return render(request, 'MainApp/pizza.html', context)
 
 
 def lookup(pizza_id):
-    #keys = {'Cheese':'0', 'Hawaiian':'1', 'MeatLovers':'2', 'Pepperoni':'3', 'Supreme':'4'}
-    keys = {'1':'Pepperoni', '2':'Cheese', '3':'Hawaiian', '4':'MeatLovers', '5':'Supreme'}
-    value = keys[pizza_id]
-    return value
+    if pizza_id == 1:
+        p_type = "1"
+    elif pizza_id == 2:
+        p_type = "2"
+    elif pizza_id == 3:
+        p_type = "3"
+    elif pizza_id == 4:
+        p_type = "4"
+    else:
+        p_type = "5"
 
-
-
-def comments(request, pizza_id):
-    if request.method == "GET" and request.GET.get("btn1"):
-        comment = request.GET.get("comment")
-        Comment.objects.create(post_id=pizza_id, username=request.user, text=comment, date_added=date.today())
-
-    comments = Comment.object.filter(post=pizza_id)
-    post = Post.objects.get(id=pizza_id)
-
-    context = {'posts':post, 'comments':comments}
-    return render(request, 'MainApp/comments.html', context)
+    #keys = {'1':'Pepperoni', '2':'Cheese', '3':'Hawaiian', '4':'MeatLovers', '5':'Supreme'}
+    return p_type
 
 @login_required
 def profile(request):
@@ -68,3 +64,24 @@ def profile(request):
 
     context = { 'form':form}
     return render(request, 'MainApp/profile.html', context)
+
+@login_required
+#new_entry
+def new_comm(request, pizza_id):
+    pizza = Pizza.objects.get(id=pizza_id)
+
+    if request.method != 'POST':
+        form = CommentForm()
+    else:
+        form = CommentForm(data=request.POST)
+
+        if form.is_valid():
+            new_comm = form.save(commit=False)
+            #passing the actual object
+            new_comm.username = request.user
+            new_comm.pizza = pizza
+            new_comm.save()
+            return redirect('MainApp:pizza', pizza_id=pizza_id)
+
+    context = {'form':form, 'pizza':pizza}
+    return render(request, 'MainApp/new_comm.html', context)

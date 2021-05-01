@@ -13,6 +13,8 @@ print(top)
 t_type = top.entry_set.all()
 for topping in toppings:
     print(t_type)
+
+profile = Profile.objects.get(user=1)
     
 """
 

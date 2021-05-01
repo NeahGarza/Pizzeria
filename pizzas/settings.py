@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'MainApp',
     'users',
 
-
+    'bootstrap4',
+    #'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -6,24 +6,7 @@ from django.contrib.auth.models import User
 
 class Pizza(models.Model):
     name = models.CharField(max_length=50)
-    image = models.ImageField(upload_to='images',blank=True)
-
-    CHEESE = "C"
-    HAWAIIAN = "H"
-    MEATLOVERS = "M"
-    PEPPERONI = "P"
-    SUPREME = "S"
-
-    PIZZA_PIC_CHOICES = [
-        (CHEESE, 'Cheese'),
-        (HAWAIIAN, 'Hawaiian'),
-        (MEATLOVERS, 'MeatLovers'),
-        (PEPPERONI, 'Pepperoni'),
-        (SUPREME, 'Supreme'),
-    ]
-
-    pizza_type = models.CharField(max_length=1, choices=PIZZA_PIC_CHOICES, default=None)
-
+    
     #We do this because otherwise we couln't see the output 
     def __str__(self):
         return self.name
@@ -57,8 +40,8 @@ class Profile(models.Model):
 class Comment(models.Model):
     pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE)
     username = models.ForeignKey(User, related_name='details', on_delete=models.CASCADE)
-    text = models.CharField(max_length=200)
+    text = models.TextField()
     date_added = models.DateTimeField(auto_now_add=True,blank=True)
 
     def __str__(self):
-        return self.text
+        return 'Comment {} by {}'.format(self.text, self.username)

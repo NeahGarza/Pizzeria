@@ -1,8 +1,36 @@
 {% extends "MainApp/base.html" %}
+{% load bootstrap4 %}
+
 
 {% block content %}
 
-<p> Pizza Type: {{pizza}} </p>
+<td>
+    {% if pizza.id == 1 %}
+    <img src="/MainApp/templates/MainApp/images/images/Pepperoni.jfif" alt="Pepperoni Pizza">
+    {% endif %}
+
+    {% if pizza.id == 2 %}
+    <img src="/MainApp/templates/MainApp/images/images/Pepperoni.jfif" alt="Cheese Pizza">
+    {% endif %}
+
+    {% if pizza.id == 3 %}
+    {% load static %}
+    <img src="/MainApp/templates/MainApp/images/images/Pepperoni.jfif" alt="Hawaiian Pizza">
+    {% endif %}
+
+    {% if pizza.id == 4 %}
+    {% load static %}
+    <img src="/MainApp/templates/MainApp/images/images/Pepperoni.jfif" alt="Meat Lovers Pizza">
+    {% endif %}
+
+    {% if pizza.id == 5 %}
+    {% load static %}
+    <img src="/MainApp/templates/MainApp/images/images/Pepperoni.jfif" alt="Supreme Pizza">
+    {% endif %}
+</td>
+
+<h3> Pizza Type: {{pizza}} </h3>
+<p>Toppings include:</p>
 
 <ul>
     {% for topping in toppings %}
@@ -14,9 +42,20 @@
     {% endfor %}
 </ul>
 
-{% if img_type == 0 %}
-<img src="{% static 'images/Cheese.jfif' %}" alt="Cheese Pizza">
-{% endif %}
+<h3>Comments:</h3>
+<ul>
+    {% for comm in comments %}
+    <p>{{comm.username | linebreaks }}</p>
+    <p>{{comm.date_added|date:'M d, Y H:i'}}</p>
+    <p>{{comm.text | linebreaks }}</p>
+    <p>-----------------------------------------------------------------------</p>
+    {% empty %}
+    <li> There are no comments for this pizza yet.</li>
+    {% endfor %}
+</ul>
 
+<p>
+    <a href="{% url 'MainApp:new_comm' pizza.id %}"> Leave a comment: </a>
+</p>
 
 {% endblock content %}
